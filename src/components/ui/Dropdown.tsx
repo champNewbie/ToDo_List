@@ -4,15 +4,18 @@ import React, { useState } from 'react'
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import Today from './today';
 import StickyWall from './StickyWall';
+import {motion , AnimatePresence } from 'framer-motion'
 
 const Dropdown = () => {
   const [isOpen , setIsOpen] = useState(false)
+  const [today , setToday] = useState(false)
   const openHandler = () => {
     setIsOpen(!isOpen)
   }
   return (
     <div>
-      <button type='button' onClick={openHandler} className='w-full'>
+      <button 
+      type='button' onClick={openHandler} className='w-full cursor-pointer'>
         <div className='bg-gray-100 py-2 px-1 mt-2 rounded-lg'>
               <div className='flex flex-row justify-start items-center px-3'>
                     <div className={`text-xl transition-transform
@@ -22,16 +25,19 @@ const Dropdown = () => {
                   <h1 className='ml-3 font-bold'>Upcoming</h1>
               </div>
         </div>  
-      </button>
-      <div className={`transition-all duration-300 ${
-    isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-        {isOpen && 
-        <div>
-          <Today/>
+      </button >
+      <AnimatePresence >
+        {isOpen && (
+        <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ease: 'easeOut', duration: 0.2 }}>
+          <Today />
           <StickyWall />
-        </div>
-        }
-      </div>
+        </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
